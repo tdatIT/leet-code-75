@@ -1,37 +1,17 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+)
+
 func main() {
-	str1 := "ABABAB"
-	str2 := "ABAB"
-	result := gcdOfStrings(str1, str2)
-	println(result) // Output: "apbqcr"
+	str := "the sky is blue"
+	fmt.Println(reverseWords(str))
 }
 
-// O(n)
+// 1768. Merge Strings Alternately
 func mergeAlternately(word1 string, word2 string) string {
-	result := ""
-	maxLen := len(word1)
-
-	if maxLen < len(word2) {
-		maxLen = len(word2)
-	}
-
-	i := 0
-	for i < maxLen {
-		if i < len(word1) {
-			result = result + string(word1[i])
-		}
-		if i < len(word2) {
-			result = result + string(word2[i])
-		}
-
-		i++
-	}
-
-	return result
-}
-
-func mergeAlternatelyBetter(word1 string, word2 string) string {
 	result := ""
 	i, j := 0, 0
 
@@ -70,4 +50,66 @@ func gcd(a, b int) int {
 		a, b = b, a%b
 	}
 	return a
+}
+
+// 345. Reverse Vowels of a String
+func reverseVowels(s string) string {
+
+	left := 0
+	right := len(s) - 1
+	strArr := []byte(s)
+	for left < right {
+		leftOk := isVowels(strArr[left])
+		rightOk := isVowels(strArr[right])
+
+		if !leftOk {
+			left++
+		}
+
+		if !rightOk {
+			right--
+		}
+
+		if leftOk && rightOk {
+			t := strArr[left]
+			strArr[left] = strArr[right]
+			strArr[right] = t
+			left++
+			right--
+		}
+	}
+
+	return string(strArr)
+}
+
+func isVowels(c byte) bool {
+	switch c {
+	case 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U':
+		return true
+	}
+
+	return false
+}
+
+// 151. Reverse Words in a String
+func reverseWords(s string) string {
+	var result []string
+	i := len(s) - 1
+
+	for i >= 0 {
+		if s[i] == ' ' {
+			i--
+		} else {
+			start := i
+
+			for start >= 0 && s[start] != ' ' {
+				start--
+			}
+
+			result = append(result, s[start+1:i+1])
+			i = start
+		}
+	}
+
+	return strings.Join(result, " ")
 }
