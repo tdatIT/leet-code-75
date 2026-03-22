@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	nums := []int{0, 1, 1, 3, 3}
-	fmt.Println(findMaxAverage(nums, 4))
+	nums := []int{1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0}
+	fmt.Println(longestOnes(nums, 2))
 }
 
 // 643. Maximum Average Subarray I
@@ -29,3 +29,72 @@ func findMaxAverage(nums []int, k int) float64 {
 }
 
 //1456. Maximum Number of Vowels in a Substring of Given Length
+func maxVowels(s string, k int) int {
+
+	count, max := 0, 0
+
+	for i := 0; i < k; i++ {
+		if checkVowels(s[i]) {
+			count++
+		}
+	}
+
+	max = count
+
+	for i := k; i < len(s); i++ {
+		if checkVowels(s[i]) {
+			count++
+		}
+
+		if checkVowels(s[i-k]) {
+			count--
+		}
+
+		if max < count {
+			max = count
+		}
+
+	}
+
+	return max
+}
+
+func checkVowels(c byte) bool {
+	switch c {
+	case 'a', 'u', 'i', 'o', 'e':
+		return true
+	}
+	return false
+}
+
+// 1004. Max Consecutive Ones III
+func longestOnes(nums []int, k int) int {
+	l, r, zeroCount, result := 0, 0, 0, 0
+
+	for r < len(nums) {
+		if nums[r] == 0 {
+			zeroCount++
+		}
+
+		for zeroCount > k {
+			if nums[l] == 0 {
+				zeroCount--
+			}
+
+			l++
+		}
+
+		result = max(result, r-l+1)
+		r++
+	}
+
+	return result
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+
+	return b
+}
